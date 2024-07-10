@@ -29,6 +29,11 @@ struct WeatherResult: Decodable {
     let main: Main
     let weather: [Weather]
     let name: String
+    
+    var getWeather: Weather? {
+        guard let weather = self.weather.first else { return nil }
+        return weather
+    }
 }
 
 struct ForecastResult: Decodable {

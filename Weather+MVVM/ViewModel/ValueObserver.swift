@@ -1,5 +1,5 @@
 //
-//  ReusableObserver.swift
+//  ValueObserver.swift
 //  Weather+MVVM
 //
 //  Created by 강한결 on 7/10/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ReusableObserver<T> {
+final class ValueObserver<T> {
     private var handler: ((T) -> ())?
     
     var value: T {
@@ -16,7 +16,7 @@ final class ReusableObserver<T> {
         }
     }
     
-    init(value: T) {
+    init(_ value: T) {
         self.value = value
     }
     

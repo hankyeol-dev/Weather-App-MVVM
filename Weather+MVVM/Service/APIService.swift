@@ -12,11 +12,10 @@ final class APIService {
     
     private init() {}
     
-    enum RequestType: String {
-        case current_id
-        case current = "weather"
-        case forecast = "forecast"
-        case cityname
+    enum RequestType {
+        case current(id: Int)
+        case forecast(lat: Double, lon: Double)
+        case cityname(name: String)
     }
     
     enum APIErrors: String {
@@ -25,47 +24,13 @@ final class APIService {
         case badResponse = "무언가 잘못되었어요 ㅠㅠ"
     }
     
-    private func genEndPoint(for requestType: RequestType, lat: Double, lon: Double) -> URL {
+    private func genEndPoint(to dto: FetchWeatherDTO) -> URL {
         var components = URLComponents()
         
         components.scheme = SCHEME
         components.host = HOST
-        components.path = PATH_MAIN + requestType.rawValue
-        components.queryItems = [
-            URLQueryItem(name: "lang", value: "kr"),
-            URLQueryItem(name: "lat", value: String(lat)),
-            URLQueryItem(name: "lon", value: String(lon)),
-            URLQueryItem(name: "appid", value: APIKEY)
-        ]
-        
-        return components.url!
-    }
-    
-    private func genEndPoint(for requestType: RequestType, cityName: String) -> URL {
-        var components = URLComponents()
-        
-        components.scheme = SCHEME
-        components.host = HOST
-        components.path = PATH_CITY
-        components.queryItems = [
-            URLQueryItem(name: "q", value: cityName),
-            URLQueryItem(name: "appid", value: APIKEY)
-        ]
-        
-        return components.url!
-    }
-    
-    private func genEndPoint(for requestType: RequestType, cityId: Int) -> URL {
-        var components = URLComponents()
-        
-        components.scheme = SCHEME
-        components.host = HOST
-        components.path = PATH_MAIN + "weather"
-        components.queryItems = [
-            URLQueryItem(name: "lang", value: "kr"),
-            URLQueryItem(name: "id", value: String(cityId)),
-            URLQueryItem(name: "appid", value: APIKEY)
-        ]
+        components.path = dto.path
+        components.queryItems = dto.queryString
         
         return components.url!
     }
@@ -98,20 +63,11 @@ final class APIService {
     
     typealias handler<T> = (T?, APIErrors?) -> ()
     
-    func fetch<T: Decodable>(for requestType: RequestType, cityId: Int, handler: @escaping handler<T>) {
-        let request = genRequest(genEndPoint(for: requestType, cityId: cityId))
+    func fetch<T: Decodable>(to dto: FetchWeatherDTO, handler: @escaping handler<T>) {
+        let request = genRequest(genEndPoint(to: dto))
         self.fetchTask(for: request, handler: handler)
     }
     
-    func fetch<T: Decodable>(_ requestType: RequestType, cityName: String, handler: @escaping handler<T>) {
-        let request = genRequest(genEndPoint(for: requestType, cityName: cityName))
-        self.fetchTask(for: request, handler: handler)
-    }
-    
-    func fetch<T: Decodable>(_ requestType: RequestType, lat: Double, lon: Double, handler: @escaping handler<T>) {
-        let request = genRequest(genEndPoint(for: requestType, lat: lat, lon: lon))
-        self.fetchTask(for: request, handler: handler)
-    }
     
     private func fetchTask<T: Decodable>(for request: URLRequest, handler: @escaping handler<T>) {
         let task = URLSession.shared.dataTask(with: request) { data, _, error in

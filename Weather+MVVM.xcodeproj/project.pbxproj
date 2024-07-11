@@ -28,6 +28,7 @@
 		81965F282C3EAD5F008BEDEB /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F272C3EAD5F008BEDEB /* MainViewModel.swift */; };
 		81965F2A2C3EAE84008BEDEB /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F292C3EAE84008BEDEB /* SearchModel.swift */; };
 		81965F2D2C3EBC24008BEDEB /* CurrentWeatherOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F2C2C3EBC24008BEDEB /* CurrentWeatherOutput.swift */; };
+		81965F2F2C3F595E008BEDEB /* DataFetchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		81965F272C3EAD5F008BEDEB /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		81965F292C3EAE84008BEDEB /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		81965F2C2C3EBC24008BEDEB /* CurrentWeatherOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherOutput.swift; sourceTree = "<group>"; };
+		81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchDTO.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				81965F2C2C3EBC24008BEDEB /* CurrentWeatherOutput.swift */,
+				81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				81965F2A2C3EAE84008BEDEB /* SearchModel.swift in Sources */,
 				81965F052C3E5716008BEDEB /* BaseTableCell.swift in Sources */,
 				81965F242C3EAC0E008BEDEB /* LocationWeatherViewController.swift in Sources */,
+				81965F2F2C3F595E008BEDEB /* DataFetchDTO.swift in Sources */,
 				81965F282C3EAD5F008BEDEB /* MainViewModel.swift in Sources */,
 				81965F262C3EAC2C008BEDEB /* SearchCityViewController.swift in Sources */,
 				81965F2D2C3EBC24008BEDEB /* CurrentWeatherOutput.swift in Sources */,

@@ -51,7 +51,7 @@ final class MainViewModel {
         
         // 2. fetch
         DispatchQueue.global().async {
-            self.apiManager.fetch(for: .current_id, cityId: self.currentCityId) { (data: WeatherResult?, error: APIService.APIErrors?) in
+            self.apiManager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCityId))) { (data: WeatherResult?, error: APIService.APIErrors?) in
                 if let error {
                     print(error.rawValue)
                     return

@@ -28,19 +28,18 @@ struct FetchWeatherDTO: FetchDTO {
         case .current(let id):
             return [
                 URLQueryItem(name: "id", value: String(id)),
-                URLQueryItem(name: "lang", value: "kr"),
                 URLQueryItem(name: "appId", value: APIKEY)
             ]
         case .forecast(let lat, let lon):
             return [
                 URLQueryItem(name: "lat", value: String(lat)),
                 URLQueryItem(name: "lon", value: String(lon)),
-                URLQueryItem(name: "lang", value: "kr"),
                 URLQueryItem(name: "appId", value: APIKEY)
             ]
         case .cityname(let name):
             return [
                 URLQueryItem(name: "q", value: name),
+                URLQueryItem(name: "limit", value: "1"),
                 URLQueryItem(name: "appId", value: APIKEY)
             ]
         }

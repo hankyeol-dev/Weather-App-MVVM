@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8138FDA22C3FED8100F50F9A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8138FDA12C3FED8100F50F9A /* Kingfisher */; };
 		81965EEA2C3E54C9008BEDEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965EE92C3E54C9008BEDEB /* AppDelegate.swift */; };
 		81965EEC2C3E54C9008BEDEB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965EEB2C3E54C9008BEDEB /* SceneDelegate.swift */; };
 		81965EEE2C3E54C9008BEDEB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965EED2C3E54C9008BEDEB /* MainViewController.swift */; };
@@ -27,8 +28,10 @@
 		81965F262C3EAC2C008BEDEB /* SearchCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F252C3EAC2C008BEDEB /* SearchCityViewController.swift */; };
 		81965F282C3EAD5F008BEDEB /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F272C3EAD5F008BEDEB /* MainViewModel.swift */; };
 		81965F2A2C3EAE84008BEDEB /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F292C3EAE84008BEDEB /* SearchModel.swift */; };
-		81965F2D2C3EBC24008BEDEB /* CurrentWeatherOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F2C2C3EBC24008BEDEB /* CurrentWeatherOutput.swift */; };
+		81965F2D2C3EBC24008BEDEB /* WeatherOuput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F2C2C3EBC24008BEDEB /* WeatherOuput.swift */; };
 		81965F2F2C3F595E008BEDEB /* DataFetchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */; };
+		81965F3D2C3F90D8008BEDEB /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F3C2C3F90D8008BEDEB /* MainView.swift */; };
+		81965F3F2C3F9B44008BEDEB /* BaseItemWithTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F3E2C3F9B44008BEDEB /* BaseItemWithTitle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,8 +56,10 @@
 		81965F252C3EAC2C008BEDEB /* SearchCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityViewController.swift; sourceTree = "<group>"; };
 		81965F272C3EAD5F008BEDEB /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		81965F292C3EAE84008BEDEB /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
-		81965F2C2C3EBC24008BEDEB /* CurrentWeatherOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherOutput.swift; sourceTree = "<group>"; };
+		81965F2C2C3EBC24008BEDEB /* WeatherOuput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherOuput.swift; sourceTree = "<group>"; };
 		81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchDTO.swift; sourceTree = "<group>"; };
+		81965F3C2C3F90D8008BEDEB /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		81965F3E2C3F9B44008BEDEB /* BaseItemWithTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseItemWithTitle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8138FDA22C3FED8100F50F9A /* Kingfisher in Frameworks */,
 				81965EFF2C3E54FF008BEDEB /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,7 +113,9 @@
 		81965F002C3E5648008BEDEB /* View */ = {
 			isa = PBXGroup;
 			children = (
-				81965F082C3E57AE008BEDEB /* Controller */,
+				81965F3B2C3F90C1008BEDEB /* Search */,
+				81965F3A2C3F90B1008BEDEB /* Location */,
+				81965F392C3F90A9008BEDEB /* Main */,
 				81965F012C3E56A0008BEDEB /* Base */,
 			);
 			path = View;
@@ -120,18 +128,9 @@
 				81965F042C3E5716008BEDEB /* BaseTableCell.swift */,
 				81965F062C3E5727008BEDEB /* BaseCollectionItem.swift */,
 				81965F092C3E57E0008BEDEB /* BaseViewController.swift */,
+				81965F3E2C3F9B44008BEDEB /* BaseItemWithTitle.swift */,
 			);
 			path = Base;
-			sourceTree = "<group>";
-		};
-		81965F082C3E57AE008BEDEB /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				81965EED2C3E54C9008BEDEB /* MainViewController.swift */,
-				81965F232C3EAC0E008BEDEB /* LocationWeatherViewController.swift */,
-				81965F252C3EAC2C008BEDEB /* SearchCityViewController.swift */,
-			);
-			path = Controller;
 			sourceTree = "<group>";
 		};
 		81965F0F2C3E59F4008BEDEB /* Model */ = {
@@ -164,10 +163,35 @@
 		81965F2B2C3EBC13008BEDEB /* DTO */ = {
 			isa = PBXGroup;
 			children = (
-				81965F2C2C3EBC24008BEDEB /* CurrentWeatherOutput.swift */,
+				81965F2C2C3EBC24008BEDEB /* WeatherOuput.swift */,
 				81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */,
 			);
 			path = DTO;
+			sourceTree = "<group>";
+		};
+		81965F392C3F90A9008BEDEB /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				81965EED2C3E54C9008BEDEB /* MainViewController.swift */,
+				81965F3C2C3F90D8008BEDEB /* MainView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		81965F3A2C3F90B1008BEDEB /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				81965F232C3EAC0E008BEDEB /* LocationWeatherViewController.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		81965F3B2C3F90C1008BEDEB /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				81965F252C3EAC2C008BEDEB /* SearchCityViewController.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,6 +212,7 @@
 			name = "Weather+MVVM";
 			packageProductDependencies = (
 				81965EFE2C3E54FF008BEDEB /* SnapKit */,
+				8138FDA12C3FED8100F50F9A /* Kingfisher */,
 			);
 			productName = "Weather+MVVM";
 			productReference = 81965EE62C3E54C9008BEDEB /* Weather+MVVM.app */;
@@ -219,6 +244,7 @@
 			mainGroup = 81965EDD2C3E54C9008BEDEB;
 			packageReferences = (
 				81965EFD2C3E54FF008BEDEB /* XCRemoteSwiftPackageReference "SnapKit" */,
+				8138FDA02C3FED8100F50F9A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 81965EE72C3E54C9008BEDEB /* Products */;
 			projectDirPath = "";
@@ -252,14 +278,16 @@
 				81965EEA2C3E54C9008BEDEB /* AppDelegate.swift in Sources */,
 				81965F2A2C3EAE84008BEDEB /* SearchModel.swift in Sources */,
 				81965F052C3E5716008BEDEB /* BaseTableCell.swift in Sources */,
+				81965F3D2C3F90D8008BEDEB /* MainView.swift in Sources */,
 				81965F242C3EAC0E008BEDEB /* LocationWeatherViewController.swift in Sources */,
 				81965F2F2C3F595E008BEDEB /* DataFetchDTO.swift in Sources */,
 				81965F282C3EAD5F008BEDEB /* MainViewModel.swift in Sources */,
 				81965F262C3EAC2C008BEDEB /* SearchCityViewController.swift in Sources */,
-				81965F2D2C3EBC24008BEDEB /* CurrentWeatherOutput.swift in Sources */,
+				81965F2D2C3EBC24008BEDEB /* WeatherOuput.swift in Sources */,
 				81965F072C3E5727008BEDEB /* BaseCollectionItem.swift in Sources */,
 				81965F162C3E60E9008BEDEB /* APIService.swift in Sources */,
 				81965EEC2C3E54C9008BEDEB /* SceneDelegate.swift in Sources */,
+				81965F3F2C3F9B44008BEDEB /* BaseItemWithTitle.swift in Sources */,
 				81965F112C3E5A0A008BEDEB /* GeoModel.swift in Sources */,
 				81965F0E2C3E588F008BEDEB /* ENV.swift in Sources */,
 				81965F0A2C3E57E0008BEDEB /* BaseViewController.swift in Sources */,
@@ -478,6 +506,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8138FDA02C3FED8100F50F9A /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
 		81965EFD2C3E54FF008BEDEB /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -489,6 +525,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8138FDA12C3FED8100F50F9A /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8138FDA02C3FED8100F50F9A /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		81965EFE2C3E54FF008BEDEB /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 81965EFD2C3E54FF008BEDEB /* XCRemoteSwiftPackageReference "SnapKit" */;

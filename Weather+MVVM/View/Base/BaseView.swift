@@ -27,7 +27,6 @@ class BaseView: UIView {
 }
 
 extension BaseView {
-    func configureViewWithData<T>(_ data: T) { }
     func addAction<T: UIControl>(_ component: T, target: Any?, selector: Selector, event: UIControl.Event) {
         component.addTarget(target, action: selector, for: event)
     }

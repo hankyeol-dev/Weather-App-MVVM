@@ -8,8 +8,8 @@
 import UIKit
 
 class MainViewController: BaseViewController {
-    var vm: MainViewModel?
-    private let repository = SearchRepository()
+    private var vm: MainViewModel?
+    private let mainView = MainView()
     
     init(vm: MainViewModel) {
         self.vm = vm
@@ -20,6 +20,10 @@ class MainViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func loadView() {
+        self.view = mainView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureToolBar()
@@ -28,9 +32,9 @@ class MainViewController: BaseViewController {
 
     func configureData() {
         vm?.viewDidInput.value = ()
-        vm?.currentDataOuput.bind(nil, handler: { output in
-            if let output {
-                print(output)
+        vm?.currentWeatherOutput.bind(nil, handler: { output in
+            if let data = output?.data {
+                self.mainView.configureViewWithData(data)
             }
         })
     }

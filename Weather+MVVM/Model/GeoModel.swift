@@ -12,7 +12,7 @@ struct City: Decodable {
     let ko: String?
 }
 
-struct CityName: Decodable {
+struct CityNameResult: Decodable {
     let local_names: City
 }
 

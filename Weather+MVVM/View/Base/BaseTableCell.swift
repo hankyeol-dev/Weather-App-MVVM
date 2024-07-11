@@ -32,7 +32,7 @@ extension TableViewCellReuseProtocol where Self: UITableViewCell {
     }
 }
 
-class BaseTableCell: UITableViewCell {
+class BaseTableCell: UITableViewCell, TableViewCellReuseProtocol {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -64,19 +64,4 @@ class BaseTableCell: UITableViewCell {
      - someview.textColor = .red
      */
     func configureView(){}
-}
-
-extension BaseTableCell {
-    /**
-     인자로 받은 데이터를 기반으로 뷰 객체를 설정하는 메서드
-     */
-    func configureViewWithData<T>(_ data: T) { }
-    
-    /**
-     UIControl을 상속받는 뷰 객체에게 이벤트를 맵핑하는 메서드
-     - addAction(someButton, target: self, selector: #selector(someMethod), event: .touchUpInside)
-     */
-    func addAction<T: UIControl>(_ component: T, target: Any?, selector: Selector, event: UIControl.Event) {
-        component.addTarget(target, action: selector, for: event)
-    }
 }

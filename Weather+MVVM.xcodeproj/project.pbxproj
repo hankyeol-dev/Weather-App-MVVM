@@ -32,6 +32,9 @@
 		81965F2F2C3F595E008BEDEB /* DataFetchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */; };
 		81965F3D2C3F90D8008BEDEB /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F3C2C3F90D8008BEDEB /* MainView.swift */; };
 		81965F3F2C3F9B44008BEDEB /* BaseItemWithTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81965F3E2C3F9B44008BEDEB /* BaseItemWithTitle.swift */; };
+		81CC064F2C4003A40020BCBE /* SearchCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC064E2C4003A40020BCBE /* SearchCityView.swift */; };
+		81CC06512C4005780020BCBE /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06502C4005780020BCBE /* SearchViewModel.swift */; };
+		81CC06532C40129E0020BCBE /* SearchCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06522C40129E0020BCBE /* SearchCityCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,9 @@
 		81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchDTO.swift; sourceTree = "<group>"; };
 		81965F3C2C3F90D8008BEDEB /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		81965F3E2C3F9B44008BEDEB /* BaseItemWithTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseItemWithTitle.swift; sourceTree = "<group>"; };
+		81CC064E2C4003A40020BCBE /* SearchCityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityView.swift; sourceTree = "<group>"; };
+		81CC06502C4005780020BCBE /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		81CC06522C40129E0020BCBE /* SearchCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +162,7 @@
 			children = (
 				81965F1F2C3E7C30008BEDEB /* ValueObserver.swift */,
 				81965F272C3EAD5F008BEDEB /* MainViewModel.swift */,
+				81CC06502C4005780020BCBE /* SearchViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -190,6 +197,8 @@
 			isa = PBXGroup;
 			children = (
 				81965F252C3EAC2C008BEDEB /* SearchCityViewController.swift */,
+				81CC064E2C4003A40020BCBE /* SearchCityView.swift */,
+				81CC06522C40129E0020BCBE /* SearchCityCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -273,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81CC06512C4005780020BCBE /* SearchViewModel.swift in Sources */,
 				81965F202C3E7C30008BEDEB /* ValueObserver.swift in Sources */,
 				81965EEE2C3E54C9008BEDEB /* MainViewController.swift in Sources */,
 				81965EEA2C3E54C9008BEDEB /* AppDelegate.swift in Sources */,
@@ -290,6 +300,8 @@
 				81965F3F2C3F9B44008BEDEB /* BaseItemWithTitle.swift in Sources */,
 				81965F112C3E5A0A008BEDEB /* GeoModel.swift in Sources */,
 				81965F0E2C3E588F008BEDEB /* ENV.swift in Sources */,
+				81CC06532C40129E0020BCBE /* SearchCityCell.swift in Sources */,
+				81CC064F2C4003A40020BCBE /* SearchCityView.swift in Sources */,
 				81965F0A2C3E57E0008BEDEB /* BaseViewController.swift in Sources */,
 				81965F182C3E66B9008BEDEB /* WeatherModel.swift in Sources */,
 				81965F032C3E56C2008BEDEB /* BaseView.swift in Sources */,

@@ -32,7 +32,7 @@ class BaseItemWithTitle: BaseView {
         }
         contentView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom)
-            $0.horizontalEdges.bottom.equalTo(self.safeAreaLayoutGuide).inset(8)
+            $0.horizontalEdges.bottom.equalTo(self.safeAreaLayoutGuide).inset(12)
         }
     }
     

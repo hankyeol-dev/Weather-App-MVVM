@@ -9,10 +9,11 @@ import UIKit
 
 class MainViewController: BaseViewController {
     private var vm: MainViewModel?
-    private let mainView = MainView()
+    private var mainView: MainView?
     
-    init(vm: MainViewModel) {
+    init(vm: MainViewModel, mv: MainView) {
         self.vm = vm
+        self.mainView = mv
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -29,12 +30,17 @@ class MainViewController: BaseViewController {
         configureToolBar()
         configureData()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNav(title: "현재 날씨", leftBarItem: nil, rightBarItem: nil)
+    }
 
     func configureData() {
         vm?.viewDidInput.value = ()
         vm?.currentWeatherOutput.bind(nil, handler: { output in
             if let data = output?.data {
-                self.mainView.configureViewWithData(data)
+                self.mainView?.configureViewWithData(data)
             }
         })
     }
@@ -62,6 +68,8 @@ extension MainViewController {
     
     @objc
     func goSearchVC() {
-        goSomeVC(vc: SearchCityViewController()) { _ in }
+        goSomeVC(
+            vc: SearchCityViewController(vm: SearchViewModel(repository: SearchRepository(), manager: APIService.manager), mv: SearchCityView())
+        ) { _ in }
     }
 }

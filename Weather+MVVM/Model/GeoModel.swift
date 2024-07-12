@@ -17,8 +17,8 @@ struct CityNameResult: Decodable {
 }
 
 struct CountryCoord: Decodable {
-    let lon: Double
     let lat: Double
+    let lon: Double
 }
 
 struct Country: Decodable {

@@ -17,16 +17,17 @@ final class MainViewModel {
         - 최대 10개 까지만 보여주도록
      3. 5일간 일기 예보
      */
-    private var currentCityId: Int = 0
+    private var currentCity: Country = Country(id: SEOUL_CITY_ID, name: "Seoul", coord: CountryCoord(lat: SEOUL_LAT, lon: SEOUL_LON))
     var viewDidInput = ValueObserver<Void?>(nil)
     var currentWeatherOutput = ValueObserver<WeatherOuput?>(nil)
-//    var forecastDataOutput = ValueObserver
+    var forecastDataOutput = ValueObserver<ForecastOutput?>(nil)
     
     init(repository: SearchRepository) {
         self.repository = repository
         self.viewDidInput.bind(nil) { value in
             guard value != nil else { return }
             self.fetchCurrentWeather()
+            self.fetchForecast()
         }
     }
     
@@ -51,14 +52,14 @@ final class MainViewModel {
     
     private func fetchCurrentWeather() {
         // 1. 도시 정보를 먼저 DB에서 조회해서 가져오고
-        fetchSearch()
+        fetchCityInfo()
         
         // 2. fetch
         DispatchQueue.global().async {
             var returns = WeatherDataReturnType(city: "", currentTemps: [], description: "", icon: "")
-            self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCityId))) { (data: WeatherResult?, error: APIService.APIErrors?) in
+            self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCity.id))) { (data: WeatherResult?, error: APIService.APIErrors?) in
                 if let error {
-                    self.currentWeatherOutput.value = WeatherOuput(ok: false, error: error.rawValue, data: nil)
+                    self.currentWeatherOutput.value = WeatherOuput(ok: false)
                     return
                 }
                 
@@ -84,14 +85,36 @@ final class MainViewModel {
         }
     }
     
-    private func fetchSearch() {
-        repository?.readSearch { search, error in
-            if let error { print(error) }
-            if let search, search.count != 0, let city = search.first {
-                self.currentCityId = city.id
-            } else {
-                self.currentCityId = SEOUL_CITY_ID
+    private func fetchForecast() {
+        self.fetchCityInfo()
+        
+        var returns = ForecastDataReturnType(forcasts: [], tempAvgs: [], tempDays: [], tempIcons: [])
+        DispatchQueue.global().async {
+            self.manager.fetch(
+                to: FetchWeatherDTO(type: .forecast(lat: self.currentCity.coord.lat, lon: self.currentCity.coord.lon))
+            ) { (data: ForecastResult?, error: APIService.APIErrors?) in
+                if let error {
+                    self.forecastDataOutput.value = ForecastOutput(ok: false)
+                }
+                
+                if let data {
+                    returns.forcasts = data.tempForcasts
+                    returns.tempAvgs = data.tempAvgs
+                    returns.tempDays = data.tempDays
+                    returns.tempIcons = data.tempIcons
+                    self.forecastDataOutput.value = ForecastOutput(ok: true, data: returns)
+                }
             }
         }
     }
+    
+    private func fetchCityInfo() {
+        repository?.readSearch { search, error in
+            if let error { print(error) }
+            if let search, search.count != 0, let city = search.first {
+                self.currentCity = Country(id: city.id, name: city.name, coord: CountryCoord(lat: city.lat, lon: city.lon))
+            }
+        }
+    }
+    
 }

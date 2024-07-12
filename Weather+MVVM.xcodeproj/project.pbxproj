@@ -36,6 +36,9 @@
 		81CC06512C4005780020BCBE /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06502C4005780020BCBE /* SearchViewModel.swift */; };
 		81CC06532C40129E0020BCBE /* SearchCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06522C40129E0020BCBE /* SearchCityCell.swift */; };
 		81CC06552C40B2020020BCBE /* SearchCityOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06542C40B2020020BCBE /* SearchCityOutput.swift */; };
+		81CC06572C40D9700020BCBE /* MainForecastItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06562C40D9700020BCBE /* MainForecastItem.swift */; };
+		81CC06592C40E3430020BCBE /* MainForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06582C40E3430020BCBE /* MainForecastCell.swift */; };
+		81CC065B2C41101F0020BCBE /* ForecastOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC065A2C41101F0020BCBE /* ForecastOutput.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +71,9 @@
 		81CC06502C4005780020BCBE /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		81CC06522C40129E0020BCBE /* SearchCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityCell.swift; sourceTree = "<group>"; };
 		81CC06542C40B2020020BCBE /* SearchCityOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityOutput.swift; sourceTree = "<group>"; };
+		81CC06562C40D9700020BCBE /* MainForecastItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainForecastItem.swift; sourceTree = "<group>"; };
+		81CC06582C40E3430020BCBE /* MainForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainForecastCell.swift; sourceTree = "<group>"; };
+		81CC065A2C41101F0020BCBE /* ForecastOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastOutput.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +181,7 @@
 				81965F2C2C3EBC24008BEDEB /* WeatherOuput.swift */,
 				81CC06542C40B2020020BCBE /* SearchCityOutput.swift */,
 				81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */,
+				81CC065A2C41101F0020BCBE /* ForecastOutput.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -182,8 +189,10 @@
 		81965F392C3F90A9008BEDEB /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				81965EED2C3E54C9008BEDEB /* MainViewController.swift */,
 				81965F3C2C3F90D8008BEDEB /* MainView.swift */,
+				81CC06562C40D9700020BCBE /* MainForecastItem.swift */,
+				81965EED2C3E54C9008BEDEB /* MainViewController.swift */,
+				81CC06582C40E3430020BCBE /* MainForecastCell.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -287,6 +296,7 @@
 			files = (
 				81CC06512C4005780020BCBE /* SearchViewModel.swift in Sources */,
 				81965F202C3E7C30008BEDEB /* ValueObserver.swift in Sources */,
+				81CC065B2C41101F0020BCBE /* ForecastOutput.swift in Sources */,
 				81965EEE2C3E54C9008BEDEB /* MainViewController.swift in Sources */,
 				81965EEA2C3E54C9008BEDEB /* AppDelegate.swift in Sources */,
 				81965F2A2C3EAE84008BEDEB /* SearchModel.swift in Sources */,
@@ -295,8 +305,10 @@
 				81965F242C3EAC0E008BEDEB /* LocationWeatherViewController.swift in Sources */,
 				81965F2F2C3F595E008BEDEB /* DataFetchDTO.swift in Sources */,
 				81965F282C3EAD5F008BEDEB /* MainViewModel.swift in Sources */,
+				81CC06572C40D9700020BCBE /* MainForecastItem.swift in Sources */,
 				81965F262C3EAC2C008BEDEB /* SearchCityViewController.swift in Sources */,
 				81965F2D2C3EBC24008BEDEB /* WeatherOuput.swift in Sources */,
+				81CC06592C40E3430020BCBE /* MainForecastCell.swift in Sources */,
 				81965F072C3E5727008BEDEB /* BaseCollectionItem.swift in Sources */,
 				81965F162C3E60E9008BEDEB /* APIService.swift in Sources */,
 				81965EEC2C3E54C9008BEDEB /* SceneDelegate.swift in Sources */,

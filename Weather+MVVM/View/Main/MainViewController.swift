@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainViewController: BaseViewController {
+final class MainViewController: BaseViewController {
     private var vm: MainViewModel?
     private var mainView: MainView?
     
@@ -28,7 +28,8 @@ class MainViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureToolBar()
-        
+        configureCollection()
+        configureTable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,15 +41,25 @@ class MainViewController: BaseViewController {
     func configureData() {
         vm?.viewDidInput.value = ()
         vm?.currentWeatherOutput.bind(nil, handler: { output in
-            if let data = output?.data {
-                self.mainView?.configureViewWithData(data)
+            DispatchQueue.main.async {
+                if let data = output?.data {
+                    self.mainView?.configureHeaderWithData(data)
+                }
+            }
+        })
+        vm?.forecastDataOutput.bind(nil, handler: { output in
+            DispatchQueue.main.async {
+                if output?.ok != nil {
+                    self.mainView?.collection.reloadData()
+                    self.mainView?.table.reloadSections(IndexSet(integer: 0), with: .none)
+                }
             }
         })
     }
 }
 
 extension MainViewController {
-    func configureToolBar() {
+    private func configureToolBar() {
         navigationController?.isToolbarHidden = false
         
         let left = UIBarButtonItem(image: UIImage(systemName: "map.fill"), style: .plain, target: self, action: #selector(goLocationVC))
@@ -72,5 +83,59 @@ extension MainViewController {
         goSomeVC(
             vc: SearchCityViewController(vm: SearchViewModel(repository: SearchRepository(), manager: APIService.manager), mv: SearchCityView())
         ) { _ in }
+    }
+}
+
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    private func configureCollection() {
+        mainView?.collection.delegate = self
+        mainView?.collection.dataSource = self
+        mainView?.collection.register(MainForecastItem.self, forCellWithReuseIdentifier: MainForecastItem.id)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let vm else { return 0 }
+        guard let data = vm.forecastDataOutput.value?.data else { return 0 }
+        return data.forcasts.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let vm else { return  UICollectionViewCell() }
+        guard let data = vm.forecastDataOutput.value?.data else { return UICollectionViewCell() }
+        
+        let item = collectionView.dequeueReusableCell(withReuseIdentifier: MainForecastItem.id, for: indexPath) as! MainForecastItem
+        item.configureCollectionWithData(data.forcasts[indexPath.row])
+        return item
+    }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    private func configureTable() {
+        guard let table = mainView?.table else { return }
+        table.delegate = self
+        table.dataSource = self
+        table.rowHeight = 60
+        
+        table.separatorColor = .systemGray4
+        table.separatorInset = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        
+        MainForecastCell.register(tableView: table)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let vm else { return 0 }
+        guard let data = vm.forecastDataOutput.value?.data else { return 0 }
+        return data.tempAvgs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let table = mainView?.table else { return UITableViewCell() }
+        guard let vm else { return UITableViewCell() }
+        guard let data = vm.forecastDataOutput.value?.data else { return UITableViewCell() }
+        
+        let cell = MainForecastCell.dequeueReusableCell(tableView: table)
+        cell.configureViewWithData(tempAvgs: data.tempAvgs[indexPath.row], tempDays: data.tempDays[indexPath.row], tempIcons: data.tempIcons[indexPath.row])
+        return cell
     }
 }

@@ -20,18 +20,39 @@ final class MainView: BaseView {
     private lazy var curDescription = genLabel(for: "", font: .systemFont(ofSize: 16))
     private lazy var curTemps = genLabel(for: "", font: .systemFont(ofSize: 16))
     
+    private let middle = BaseItemWithTitle("3시간 간격 예보")
+    lazy var collection = {
+        var flow = UICollectionViewFlowLayout()
+        let w = (getWindowWidth() - 56) / 5
+        let h = w * 1.5
+        flow.itemSize = CGSize(width: w, height: h)
+        flow.minimumLineSpacing = 8
+        flow.minimumInteritemSpacing = 0
+        flow.sectionInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        flow.scrollDirection = .horizontal
+        return UICollectionView(frame: .zero, collectionViewLayout: flow)
+    }()
+    
+    private let last = BaseItemWithTitle("5일간의 일기 예보")
+    let table = UITableView()
+    
     override func configureSubView() {
+        super.configureSubView()
+        
         self.addSubview(scroll)
         scroll.addSubview(back)
-        [header].forEach {
+        [header, middle, last].forEach {
             back.addSubview($0)
         }
         [icon, curTemp, curDescription, curTemps].forEach {
             header.contentView.addSubview($0)
         }
+        middle.contentView.addSubview(collection)
+        last.contentView.addSubview(table)
     }
     
     override func configureLayout() {
+        super.configureLayout()
         scroll.snp.makeConstraints {
             $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(16)
             $0.verticalEdges.equalTo(self.safeAreaLayoutGuide)
@@ -42,26 +63,24 @@ final class MainView: BaseView {
             $0.verticalEdges.equalTo(scroll)
         }
         
-        header.snp.makeConstraints {
-            $0.width.equalTo(back.snp.width)
-        }
-
         configureHeaderLayout()
+        configureMiddleLayout()
+        configureBottomLayout()
     }
     
     override func configureView() {
+        super.configureView()
+        
         scroll.backgroundColor = .clear
         back.backgroundColor = .clear
         
-        header.backgroundColor = .systemGray6
-        header.layer.cornerRadius = 16
-        
-        icon.contentMode = .scaleAspectFit
-        
+        configureHeaderView()
+        configureMiddleView()
+        configureBottomView()
     }
     
     
-    func configureViewWithData(_ data: WeatherDataReturnType) {
+    func configureHeaderWithData(_ data: WeatherDataReturnType) {
         let temps = data.currentTemps
         DispatchQueue.main.async {
             self.header.changeTitle(data.city + "의 현재 날씨")
@@ -85,7 +104,17 @@ extension MainView {
         return v
     }
     
+    private func getWindowWidth() -> CGFloat {
+        let window = UIApplication.shared.connectedScenes.first as! UIWindowScene
+        return window.screen.bounds.width
+    }
+    
     private func configureHeaderLayout() {
+        header.snp.makeConstraints {
+            $0.top.equalTo(back.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalTo(back.safeAreaLayoutGuide)
+        }
+        
         icon.snp.makeConstraints {
             $0.top.equalTo(header.contentView.safeAreaLayoutGuide).inset(8)
             $0.centerX.equalTo(header.contentView.snp.centerX)
@@ -110,5 +139,44 @@ extension MainView {
             $0.height.equalTo(28)
             $0.bottom.equalTo(header.contentView.safeAreaLayoutGuide).inset(8)
         }
+    }
+    private func configureHeaderView() {
+        header.backgroundColor = .systemGray6
+        header.layer.cornerRadius = 16
+        
+        icon.contentMode = .scaleAspectFit
+    }
+    
+    private func configureMiddleLayout() {
+        middle.snp.makeConstraints {
+            $0.top.equalTo(header.snp.bottom).offset(16)
+            $0.horizontalEdges.equalTo(back.safeAreaLayoutGuide)
+        }
+        collection.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(middle.contentView.safeAreaLayoutGuide)
+            $0.verticalEdges.equalTo(middle.contentView.safeAreaLayoutGuide)
+            $0.height.equalTo(((getWindowWidth() - 56) / 5) * 2)
+        }
+    }
+    private func configureMiddleView() {
+        collection.backgroundColor = .clear
+        collection.showsHorizontalScrollIndicator = false
+    }
+    
+    private func configureBottomLayout() {
+        last.snp.makeConstraints {
+            $0.top.equalTo(middle.snp.bottom).offset(16)
+            $0.bottom.horizontalEdges.equalTo(back.safeAreaLayoutGuide)
+        }
+        table.snp.makeConstraints {
+            $0.edges.equalTo(last.contentView.safeAreaLayoutGuide)
+            $0.center.equalTo(last.contentView.snp.center)
+            $0.height.equalTo(370)
+        }
+    }
+    
+    private func configureBottomView() {
+        table.backgroundColor = .systemGray6
+        table.showsVerticalScrollIndicator = false
     }
 }

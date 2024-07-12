@@ -64,17 +64,19 @@ final class MainViewModel {
                 
                 if let data, let getWeather = data.getWeather {
                     self.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e: APIService.APIErrors?) in
-                        if let e {
+                        if e != nil {
                             returns.city = ""
                         }
                         
                         if let city, let ko = city.first?.local_names.ko {
                             returns.city = ko
-                            returns.currentTemps = data.main.calcTemps
-                            returns.description = self.mapDescription(for: getWeather.id)
-                            returns.icon = getWeather.icon
-                            self.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
+                        } else {
+                            returns.city = data.name
                         }
+                        returns.currentTemps = data.main.calcTemps
+                        returns.description = self.mapDescription(for: getWeather.id)
+                        returns.icon = getWeather.icon
+                        self.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
                     }
                     
                 }

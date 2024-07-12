@@ -28,10 +28,7 @@ final class SearchCityViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTable()
-        vm?.loadInput.value = ()
-        vm?.searchOutput.bind([], handler: { data in
-            self.mv?.searchTable.reloadSections(IndexSet(integer: 0), with: .none)
-        })
+        configureData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +42,16 @@ final class SearchCityViewController: BaseViewController {
         guard let mv else { return }
         mv.addAction(mv.searchField, target: self, selector: #selector(searchCity), event: .editingChanged)
     }
+    
+    private func configureData() {
+        vm?.loadInput.value = ()
+        vm?.searchOutput.bind([], handler: { _ in
+            self.mv?.searchTable.reloadSections(IndexSet(integer: 0), with: .none)
+        })
+        vm?.buttonActionOuput.bind((), handler: { _ in
+            self.mv?.searchTable.reloadSections(IndexSet(integer: 0), with: .none)
+        })
+    }
 }
 
 extension SearchCityViewController {
@@ -52,6 +59,17 @@ extension SearchCityViewController {
     func searchCity() {
         guard let keyword = mv?.searchField.text else { return }
         vm?.searchInput.value = keyword
+    }
+    
+    @objc
+    func addCity(_ sender: UIButton) {
+        vm?.addButtonInput.value = sender.tag
+        
+    }
+    
+    @objc
+    func deleteCity(_ sender: UIButton) {
+        vm?.deleteButtonInput.value = sender.tag
     }
 }
 
@@ -73,8 +91,18 @@ extension SearchCityViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SearchCityCell.dequeueReusableCell(tableView: tableView)
-        cell.configureViewWithData(vm?.searchOutput.value[indexPath.row])
-        cell.addTagToButton(vm?.searchOutput.value[indexPath.row].id)
+        let cellData = vm?.searchOutput.value[indexPath.row]
+        
+        if let cellData {
+            cell.configureViewWithData(cellData)
+            cell.addTagToButton(cellData.country.id)
+            if cellData.isSelected {
+                cell.addActionToButton(isSelected: true, target: self, action: #selector(deleteCity), for: .touchUpInside)
+            } else {
+                cell.addActionToButton(isSelected: false, target: self, action: #selector(addCity), for: .touchUpInside)
+            }
+        }
+        
         return cell
     }
     

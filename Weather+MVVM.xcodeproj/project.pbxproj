@@ -35,6 +35,7 @@
 		81CC064F2C4003A40020BCBE /* SearchCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC064E2C4003A40020BCBE /* SearchCityView.swift */; };
 		81CC06512C4005780020BCBE /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06502C4005780020BCBE /* SearchViewModel.swift */; };
 		81CC06532C40129E0020BCBE /* SearchCityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06522C40129E0020BCBE /* SearchCityCell.swift */; };
+		81CC06552C40B2020020BCBE /* SearchCityOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CC06542C40B2020020BCBE /* SearchCityOutput.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		81CC064E2C4003A40020BCBE /* SearchCityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityView.swift; sourceTree = "<group>"; };
 		81CC06502C4005780020BCBE /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		81CC06522C40129E0020BCBE /* SearchCityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityCell.swift; sourceTree = "<group>"; };
+		81CC06542C40B2020020BCBE /* SearchCityOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCityOutput.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				81965F2C2C3EBC24008BEDEB /* WeatherOuput.swift */,
+				81CC06542C40B2020020BCBE /* SearchCityOutput.swift */,
 				81965F2E2C3F595E008BEDEB /* DataFetchDTO.swift */,
 			);
 			path = DTO;
@@ -299,6 +302,7 @@
 				81965EEC2C3E54C9008BEDEB /* SceneDelegate.swift in Sources */,
 				81965F3F2C3F9B44008BEDEB /* BaseItemWithTitle.swift in Sources */,
 				81965F112C3E5A0A008BEDEB /* GeoModel.swift in Sources */,
+				81CC06552C40B2020020BCBE /* SearchCityOutput.swift in Sources */,
 				81965F0E2C3E588F008BEDEB /* ENV.swift in Sources */,
 				81CC06532C40129E0020BCBE /* SearchCityCell.swift in Sources */,
 				81CC064F2C4003A40020BCBE /* SearchCityView.swift in Sources */,

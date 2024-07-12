@@ -48,15 +48,18 @@ final class SearchCityCell: BaseTableCell {
         
         button.configuration = .filled()
         button.configuration?.cornerStyle = .capsule
-        button.configuration?.title = "추가"
-        button.configuration?.baseForegroundColor = .white
-        button.configuration?.baseBackgroundColor = .systemGreen
         button.configuration?.titleAlignment = .center
     }
     
-    func configureViewWithData(_ data: Country?) {
+    func configureViewWithData(_ data: SearchCityOutput?) {
         guard let data else { return }
-        self.label.text = data.name
+        self.label.text = data.country.name
+        
+        if data.isSelected {
+            self.isSelected()
+        } else {
+            self.notSelected()
+        }
     }
 }
 
@@ -70,6 +73,22 @@ extension SearchCityCell {
     
     func addTagToButton(_ tag: Int?) {
         guard let tag else { return }
-        self.button.tag = tag
+        button.tag = tag
+    }
+    
+    func addActionToButton(isSelected: Bool, target: Any?, action: Selector, for event: UIControl.Event) {
+        button.addTarget(target, action: action, for: event)
+    }
+    
+    private func isSelected() {
+        button.configuration?.title = "추가됨"
+        button.configuration?.baseForegroundColor = .systemGray6
+        button.configuration?.baseBackgroundColor = .systemGray
+    }
+    
+    private func notSelected() {
+        button.configuration?.title = "추가"
+        button.configuration?.baseForegroundColor = .white
+        button.configuration?.baseBackgroundColor = .systemGreen
     }
 }

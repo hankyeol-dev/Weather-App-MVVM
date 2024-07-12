@@ -30,6 +30,11 @@ final class SearchRepository {
     private var container: ModelContainer?
     private var context: ModelContext?
     
+    enum RepositoryErrors: String, Error {
+        case notFound = "일치하는 데이터를 찾지 못했습니다."
+        case requestError = "데이터 조회 요청에 실패했습니다."
+    }
+    
     
     init() {
         do {
@@ -50,7 +55,7 @@ final class SearchRepository {
         }
     }
     
-    func readSearch(dataHandler: @escaping ([SearchModel]?, Error?) -> () ) {
+    func readSearch(dataHandler: @escaping ([SearchModel]?, RepositoryErrors?) -> () ) {
         let descriptor = FetchDescriptor<SearchModel>(sortBy: [SortDescriptor<SearchModel>(\.createdAt, order: .reverse)])
         
         if let context {
@@ -58,8 +63,31 @@ final class SearchRepository {
                 let data = try context.fetch(descriptor)
                 dataHandler(data, nil)
             } catch {
-                dataHandler(nil, error)
+                dataHandler(nil, .requestError)
             }
+        }
+    }
+    
+    func readSearchById(_ cityId: Int, dataHandler: @escaping (SearchModel?, RepositoryErrors?) -> ()) {
+        let descriptor = FetchDescriptor<SearchModel>(predicate: #Predicate { $0.id == cityId })
+        
+        if let context {
+            do {
+                let data = try context.fetch(descriptor)
+                if data.count != 0 {
+                    dataHandler(data.first, nil)
+                } else {
+                    dataHandler(nil, .notFound)
+                }
+            } catch {
+                dataHandler(nil, .requestError)
+            }
+        }
+    }
+    
+    func deleteSearch(for search: SearchModel) {
+        if let context {
+            context.delete(search)
         }
     }
 }

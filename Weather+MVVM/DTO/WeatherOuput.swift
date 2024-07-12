@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 struct WeatherDataReturnType {
     var city: String
     var currentTemps: [Double]

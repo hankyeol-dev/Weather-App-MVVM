@@ -28,12 +28,13 @@ class MainViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureToolBar()
-        configureData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNav(title: "현재 날씨", leftBarItem: nil, rightBarItem: nil)
+        configureData()
     }
 
     func configureData() {

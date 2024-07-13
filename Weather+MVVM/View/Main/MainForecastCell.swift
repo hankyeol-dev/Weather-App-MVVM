@@ -62,19 +62,13 @@ final class MainForecastCell: BaseTableCell {
     func configureViewWithData(tempAvgs: [Double], tempDays: String, tempIcons: String) {
         
         DispatchQueue.main.async {
-            self.day.text = tempDays + "요일"
+            self.day.text = tempDays
             self.icon.kf.setImage(with: URL(string: ICON_URL + tempIcons + "@2x.png"))
             self.temp.text = "\(tempAvgs[1]) / \(tempAvgs[2])"
+            
+            let minText = self.temp.text?.components(separatedBy: " / ").first ?? ""
+            let maxText = self.temp.text?.components(separatedBy: " / ").last ?? ""
+            self.temp.attrTextWithFontAndColor(for: [minText, maxText], font: [.systemFont(ofSize: 14), .boldSystemFont(ofSize: 16)], color: [.systemBlue.withAlphaComponent(0.6), .systemRed])
         }
-    }
-}
-
-extension MainForecastCell {
-    private func attributingText(_ target: UILabel, for text: String, as tColor: UIColor?, as tFont: UIFont?) -> NSMutableAttributedString {
-        let labelText = target.text ?? ""
-        let attrText = NSMutableAttributedString(string: text)
-        let attrRange = (labelText as NSString).range(of: text)
-        attrText.addAttributes([.foregroundColor: tColor as Any, .font: tFont as Any], range: attrRange)
-        return attrText
     }
 }

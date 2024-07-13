@@ -11,12 +11,6 @@ final class MainViewModel {
     private var repository: SearchRepository?
     private let manager = APIService.manager
     
-    /**
-     MainView에서 필요한 데이터 정리
-     2. 3시간 간격 일기 예보
-        - 최대 10개 까지만 보여주도록
-     3. 5일간 일기 예보
-     */
     private var currentCity: Country = Country(id: SEOUL_CITY_ID, name: "Seoul", coord: CountryCoord(lat: SEOUL_LAT, lon: SEOUL_LON))
     var viewDidInput = ValueObserver<Void?>(nil)
     var currentWeatherOutput = ValueObserver<WeatherOuput?>(nil)
@@ -64,6 +58,7 @@ final class MainViewModel {
                 }
                 
                 if let data, let getWeather = data.getWeather {
+                    print(data)
                     self.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e: APIService.APIErrors?) in
                         if e != nil {
                             returns.city = ""

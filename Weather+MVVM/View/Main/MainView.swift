@@ -20,7 +20,7 @@ final class MainView: BaseView {
     private lazy var curDescription = genLabel(for: "", font: .systemFont(ofSize: 16))
     private lazy var curTemps = genLabel(for: "", font: .systemFont(ofSize: 16))
     
-    private let middle = BaseItemWithTitle("3시간 간격 예보")
+    private let threeHourForecast = BaseItemWithTitle("3시간 간격 예보")
     lazy var collection = {
         var flow = UICollectionViewFlowLayout()
         let w = (getWindowWidth() - 56) / 5
@@ -33,7 +33,7 @@ final class MainView: BaseView {
         return UICollectionView(frame: .zero, collectionViewLayout: flow)
     }()
     
-    private let last = BaseItemWithTitle("5일간의 일기 예보")
+    private let fiveDaysForecast = BaseItemWithTitle("5일간의 일기 예보")
     let table = UITableView()
     
     override func configureSubView() {
@@ -41,14 +41,14 @@ final class MainView: BaseView {
         
         self.addSubview(scroll)
         scroll.addSubview(back)
-        [header, middle, last].forEach {
+        [header, threeHourForecast, fiveDaysForecast].forEach {
             back.addSubview($0)
         }
         [icon, curTemp, curDescription, curTemps].forEach {
             header.contentView.addSubview($0)
         }
-        middle.contentView.addSubview(collection)
-        last.contentView.addSubview(table)
+        threeHourForecast.contentView.addSubview(collection)
+        fiveDaysForecast.contentView.addSubview(table)
     }
     
     override func configureLayout() {
@@ -64,8 +64,8 @@ final class MainView: BaseView {
         }
         
         configureHeaderLayout()
-        configureMiddleLayout()
-        configureBottomLayout()
+        configurethreeHourForecastLayout()
+        configureFiveDaysLayout()
     }
     
     override func configureView() {
@@ -75,11 +75,14 @@ final class MainView: BaseView {
         back.backgroundColor = .clear
         
         configureHeaderView()
-        configureMiddleView()
-        configureBottomView()
+        configureThreeHourForecastView()
+        configureFiveDaysForecastView()
     }
     
     
+}
+
+extension MainView {
     func configureHeaderWithData(_ data: WeatherDataReturnType) {
         let temps = data.currentTemps
         DispatchQueue.main.async {
@@ -90,9 +93,6 @@ final class MainView: BaseView {
             self.curTemps.text = "최고 온도: \(temps[2])℃ | 최저 온도: \(temps[1])℃"
         }
     }
-}
-
-extension MainView {
     private func genLabel(for text: String, font: UIFont) -> UILabel {
         let v = UILabel()
         
@@ -103,7 +103,6 @@ extension MainView {
         
         return v
     }
-    
     private func getWindowWidth() -> CGFloat {
         let window = UIApplication.shared.connectedScenes.first as! UIWindowScene
         return window.screen.bounds.width
@@ -147,35 +146,34 @@ extension MainView {
         icon.contentMode = .scaleAspectFit
     }
     
-    private func configureMiddleLayout() {
-        middle.snp.makeConstraints {
+    private func configurethreeHourForecastLayout() {
+        threeHourForecast.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(16)
             $0.horizontalEdges.equalTo(back.safeAreaLayoutGuide)
         }
         collection.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(middle.contentView.safeAreaLayoutGuide)
-            $0.verticalEdges.equalTo(middle.contentView.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalTo(threeHourForecast.contentView.safeAreaLayoutGuide)
+            $0.verticalEdges.equalTo(threeHourForecast.contentView.safeAreaLayoutGuide)
             $0.height.equalTo(((getWindowWidth() - 56) / 5) * 2)
         }
     }
-    private func configureMiddleView() {
+    private func configureThreeHourForecastView() {
         collection.backgroundColor = .clear
         collection.showsHorizontalScrollIndicator = false
     }
     
-    private func configureBottomLayout() {
-        last.snp.makeConstraints {
-            $0.top.equalTo(middle.snp.bottom).offset(16)
+    private func configureFiveDaysLayout() {
+        fiveDaysForecast.snp.makeConstraints {
+            $0.top.equalTo(threeHourForecast.snp.bottom).offset(16)
             $0.bottom.horizontalEdges.equalTo(back.safeAreaLayoutGuide)
         }
         table.snp.makeConstraints {
-            $0.edges.equalTo(last.contentView.safeAreaLayoutGuide)
-            $0.center.equalTo(last.contentView.snp.center)
+            $0.edges.equalTo(fiveDaysForecast.contentView.safeAreaLayoutGuide)
+            $0.center.equalTo(fiveDaysForecast.contentView.snp.center)
             $0.height.equalTo(370)
         }
     }
-    
-    private func configureBottomView() {
+    private func configureFiveDaysForecastView() {
         table.backgroundColor = .systemGray6
         table.showsVerticalScrollIndicator = false
     }

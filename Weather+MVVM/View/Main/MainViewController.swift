@@ -75,7 +75,10 @@ extension MainViewController {
     
     @objc
     func goLocationVC() {
-        goSomeVC(vc: LocationWeatherViewController()) { _ in }
+        goSomeVC(vc: LocationWeatherViewController(
+            vm: LocationWeatherViewModel(repository: SearchRepository(), apiManager: APIService.manager),
+            mv: LocationWeatherView() )
+        ) { _ in }
     }
     
     @objc

@@ -7,10 +7,20 @@
 
 import Foundation
 
+struct Wind: Decodable {
+    let speed: Double
+}
+
+struct Clouds: Decodable {
+    let all: Double
+}
+
 struct Main: Decodable {
     let temp: Double
     let temp_min: Double
     let temp_max: Double
+    let pressure: Double
+    let humidity: Double
     
     var calcTemps: [Double] {
         return [self.temp, self.temp_min, self.temp_max].map {
@@ -29,6 +39,8 @@ struct WeatherResult: Decodable {
     let main: Main
     let weather: [Weather]
     let name: String
+    let wind: Wind
+    let clouds: Clouds
     
     var getWeather: Weather? {
         guard let weather = self.weather.first else { return nil }
@@ -66,7 +78,7 @@ struct ForecastResult: Decodable {
     var tempAvgs: [[Double]] {
         let array = self.list.split { cast in
             cast.dt_txt.contains("00:00:00")
-        }.map { $0.first }
+        }.map { $0.last }
         
         return array.map { $0!.main.calcTemps }
     }

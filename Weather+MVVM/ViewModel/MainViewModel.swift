@@ -50,15 +50,14 @@ final class MainViewModel {
         
         // 2. fetch
         DispatchQueue.global().async {
-            var returns = WeatherDataReturnType(city: "", currentTemps: [], description: "", icon: "")
+            var returns = WeatherDataReturnType(city: "", currentTemps: [], description: "", icon: "", additional: [:])
             self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCity.id))) { (data: WeatherResult?, error: APIService.APIErrors?) in
-                if let error {
+                guard error == nil else {
                     self.currentWeatherOutput.value = WeatherOuput(ok: false)
                     return
                 }
                 
                 if let data, let getWeather = data.getWeather {
-                    print(data)
                     self.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e: APIService.APIErrors?) in
                         if e != nil {
                             returns.city = ""
@@ -72,6 +71,9 @@ final class MainViewModel {
                         returns.currentTemps = data.main.calcTemps
                         returns.description = self.mapDescription(for: getWeather.id)
                         returns.icon = getWeather.icon
+                        returns.additional = data.getAdditionalWeather
+                        returns.additional["lat"] = self.currentCity.coord.lat
+                        returns.additional["lon"] = self.currentCity.coord.lon
                         self.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
                     }
                     
@@ -88,8 +90,9 @@ final class MainViewModel {
             self.manager.fetch(
                 to: FetchWeatherDTO(type: .forecast(lat: self.currentCity.coord.lat, lon: self.currentCity.coord.lon))
             ) { (data: ForecastResult?, error: APIService.APIErrors?) in
-                if let error {
+                guard error == nil else {
                     self.forecastDataOutput.value = ForecastOutput(ok: false)
+                    return
                 }
                 
                 if let data {

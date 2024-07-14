@@ -12,6 +12,7 @@ struct WeatherDataReturnType {
     var currentTemps: [Double]
     var description: String
     var icon: String
+    var additional: [String: Double]
 }
 
 struct WeatherOuput {

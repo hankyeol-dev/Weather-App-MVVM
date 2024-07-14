@@ -43,7 +43,7 @@ final class MainViewController: BaseViewController {
         vm?.currentWeatherOutput.bind(nil, handler: { output in
             DispatchQueue.main.async {
                 if let data = output?.data {
-                    self.mainView?.configureHeaderWithData(data)
+                    self.mainView?.configureViewWithData(data)
                 }
             }
         })

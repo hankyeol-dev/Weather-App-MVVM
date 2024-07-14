@@ -46,6 +46,15 @@ struct WeatherResult: Decodable {
         guard let weather = self.weather.first else { return nil }
         return weather
     }
+    
+    var getAdditionalWeather: [String: Double] {
+        return [
+            "바람" : self.wind.speed,
+            "구름" : self.clouds.all,
+            "기압" : self.main.pressure,
+            "습도" : (self.main.humidity / 100.0) * 100.0
+        ]
+    }
 }
 
 struct Forecast: Decodable {

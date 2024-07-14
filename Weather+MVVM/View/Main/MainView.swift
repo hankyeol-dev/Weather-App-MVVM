@@ -112,7 +112,6 @@ extension MainView {
                 self.map.setRegion(MKCoordinateRegion(center: center, latitudinalMeters: 50, longitudinalMeters: 50), animated: false)
                 self.map.addAnnotation(annotation)
             }
-            print(data.additional)
             data.additional.enumerated().forEach { (idx, value) in
                 switch value.key {
                 case "기압":
@@ -262,21 +261,23 @@ extension MainView {
     }
     
     private func genStackItem(for target: UIStackView, as title: String, text: String) {
-        let item = BaseItemWithTitle(title)
-        let label = UILabel()
-        label.text = text
-        label.font = .systemFont(ofSize: 28, weight: .medium)
-        label.textColor = .systemGray
-        
-        target.addArrangedSubview(item)
-        item.contentView.addSubview(label)
-        
-        item.snp.makeConstraints {
-            $0.verticalEdges.equalTo(target.safeAreaLayoutGuide).inset(4)
-            $0.centerY.equalTo(target.snp.centerY)
-        }
-        label.snp.makeConstraints {
-            $0.center.equalTo(item.contentView.snp.center).inset(4)
+        if target.arrangedSubviews.count <= 1 {        
+            let item = BaseItemWithTitle(title)
+            let label = UILabel()
+            label.text = text
+            label.font = .systemFont(ofSize: 28, weight: .medium)
+            label.textColor = .systemGray
+            
+            target.addArrangedSubview(item)
+            item.contentView.addSubview(label)
+            
+            item.snp.makeConstraints {
+                $0.verticalEdges.equalTo(target.safeAreaLayoutGuide).inset(4)
+                $0.centerY.equalTo(target.snp.centerY)
+            }
+            label.snp.makeConstraints {
+                $0.center.equalTo(item.contentView.snp.center).inset(4)
+            }
         }
     }
 }

@@ -97,34 +97,32 @@ final class MainView: BaseView {
 extension MainView {
     func configureViewWithData(_ data: WeatherDataReturnType) {
         let temps = data.currentTemps
-        DispatchQueue.main.async {
-            self.header.changeTitle(data.city + "의 현재 날씨")
-            self.icon.kf.setImage(with: URL(string: ICON_URL + data.icon + "@2x.png"))
-            self.curTemp.text = "\(temps[0])℃"
-            self.curDescription.text = data.description
-            self.curTemps.text = "최고 온도: \(temps[2])℃ | 최저 온도: \(temps[1])℃"
-            
-            if let lat = data.additional["lat"], let lon = data.additional["lon"] {
-                let center = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = center
-                annotation.title = data.city
-                self.map.setRegion(MKCoordinateRegion(center: center, latitudinalMeters: 50, longitudinalMeters: 50), animated: false)
-                self.map.addAnnotation(annotation)
-            }
-            data.additional.enumerated().forEach { (idx, value) in
-                switch value.key {
-                case "기압":
-                    self.genStackItem(for: self.stackOne, as: value.key, text: "\(value.value) hpa")
-                case "습도":
-                    self.genStackItem(for: self.stackOne, as: value.key, text: "\(value.value)%")
-                case "구름":
-                    self.genStackItem(for: self.stackTwo, as: value.key, text: "\(value.value)%")
-                case "바람":
-                    self.genStackItem(for: self.stackTwo, as: value.key, text: "\(value.value) m/s")
-                default:
-                    break;
-                }
+        self.header.changeTitle(data.city + "의 현재 날씨")
+        self.icon.kf.setImage(with: URL(string: ICON_URL + data.icon + "@2x.png"))
+        self.curTemp.text = "\(temps[0])℃"
+        self.curDescription.text = data.description
+        self.curTemps.text = "최고 온도: \(temps[2])℃ | 최저 온도: \(temps[1])℃"
+        
+        if let lat = data.additional["lat"], let lon = data.additional["lon"] {
+            let center = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = center
+            annotation.title = data.city
+            self.map.setRegion(MKCoordinateRegion(center: center, latitudinalMeters: 50, longitudinalMeters: 50), animated: false)
+            self.map.addAnnotation(annotation)
+        }
+        data.additional.enumerated().forEach { (idx, value) in
+            switch value.key {
+            case "기압":
+                self.genStackItem(for: self.stackOne, as: value.key, text: "\(value.value) hpa")
+            case "습도":
+                self.genStackItem(for: self.stackOne, as: value.key, text: "\(value.value)%")
+            case "구름":
+                self.genStackItem(for: self.stackTwo, as: value.key, text: "\(value.value)%")
+            case "바람":
+                self.genStackItem(for: self.stackTwo, as: value.key, text: "\(value.value) m/s")
+            default:
+                break;
             }
         }
     }
@@ -180,7 +178,7 @@ extension MainView {
         
         icon.contentMode = .scaleAspectFit
     }
-
+    
 }
 
 extension MainView {
@@ -261,7 +259,7 @@ extension MainView {
     }
     
     private func genStackItem(for target: UIStackView, as title: String, text: String) {
-        if target.arrangedSubviews.count <= 1 {        
+        if target.arrangedSubviews.count <= 1 {
             let item = BaseItemWithTitle(title)
             let label = UILabel()
             label.text = text

@@ -16,7 +16,6 @@ final class SearchViewModel {
     var searchInput = ValueObserver<String?>(nil)
     var addButtonInput = ValueObserver(0)
     var deleteButtonInput = ValueObserver(0)
-    var buttonActionOuput = ValueObserver<Void?>(nil)
 
     var searchOutput = ValueObserver<[SearchCityOutput]>([])
     
@@ -93,11 +92,23 @@ final class SearchViewModel {
         }
     }
     
+    private func mappingToSearchOutput(by cityId: Int) -> [SearchCityOutput] {
+        let temp = searchOutput.value
+        for var output in temp {
+            if output.country.id == cityId {
+                output.isSelected.toggle()
+                break
+            }
+        }
+        return temp
+    }
+    
     private func addCity(_ cityId: Int) {
         let city = searchList.filter({ $0.id == cityId }).first
         if let city {
             repository?.addSearch(SearchModel(id: cityId, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
-            buttonActionOuput.value = ()
+            let newList = mappingToSearchOutput(by: cityId)
+            searchOutput.value = newList
         }
     }
     
@@ -109,7 +120,7 @@ final class SearchViewModel {
             
             if let data {
                 self.repository?.deleteSearch(for: data)
-                self.buttonActionOuput.value = ()
+                self.searchOutput.value = self.mappingToSearchOutput(by: cityId)
             }
         }
     }

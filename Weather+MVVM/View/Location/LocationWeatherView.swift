@@ -11,7 +11,6 @@ import SnapKit
 
 final class LocationWeatherView: BaseView {
     let map = MKMapView()
-    var city = ""
     
     override func configureView() {
         self.addSubview(map)
@@ -39,7 +38,6 @@ final class LocationWeatherView: BaseView {
         
         geocoder.reverseGeocodeLocation(location) { mark, error in
             if error == nil, let mark, let place = mark.first {
-                self.city = place.locality ?? "뭐지?"
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude)
                 annotation.title = "\(place.thoroughfare ?? "")"

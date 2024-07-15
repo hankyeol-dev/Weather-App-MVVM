@@ -45,11 +45,10 @@ final class SearchCityViewController: BaseViewController {
     
     private func configureData() {
         vm?.loadInput.value = ()
-        vm?.searchOutput.bind([], handler: { _ in
-            self.mv?.searchTable.reloadSections(IndexSet(integer: 0), with: .none)
-        })
-        vm?.buttonActionOuput.bind((), handler: { _ in
-            self.mv?.searchTable.reloadSections(IndexSet(integer: 0), with: .none)
+        vm?.searchOutput.bind([], handler: { output in
+            if output.count != 0 {
+                self.mv?.searchTable.reloadData()
+            }
         })
     }
 }
@@ -64,7 +63,6 @@ extension SearchCityViewController {
     @objc
     func addCity(_ sender: UIButton) {
         vm?.addButtonInput.value = sender.tag
-        
     }
     
     @objc
@@ -95,12 +93,8 @@ extension SearchCityViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let cellData {
             cell.configureViewWithData(cellData)
-            cell.addTagToButton(cellData.country.id)
-            if cellData.isSelected {
-                cell.addActionToButton(isSelected: true, target: self, action: #selector(deleteCity), for: .touchUpInside)
-            } else {
-                cell.addActionToButton(isSelected: false, target: self, action: #selector(addCity), for: .touchUpInside)
-            }
+            cell.button.tag = cellData.country.id
+            cell.button.addTarget(self, action: cellData.isSelected ? #selector(deleteCity) : #selector(addCity), for: .touchUpInside)
         }
         
         return cell

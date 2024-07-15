@@ -11,7 +11,7 @@ import SnapKit
 final class SearchCityCell: BaseTableCell {
     private let back = UIView()
     private let label = UILabel()
-    private let button = UIButton()
+    let button = UIButton()
     
     override func configureSubView() {
         super.configureSubView()
@@ -64,13 +64,6 @@ final class SearchCityCell: BaseTableCell {
 }
 
 extension SearchCityCell {
-    /**
-     해야 하는 것
-     1. CellReturnType에 'isSelected' 값 반영 필요 -> 이미 추가된 버튼은 ui 변경
-     2. 추가 버튼 터치시 ViewModel에서 DB에 저장하는 로직 추가
-     3. 이미 추가된 항목에 추가 버튼 한 번 더 터치시 DB에 삭제하는 로직 추가
-     */
-    
     func addTagToButton(_ tag: Int?) {
         guard let tag else { return }
         button.tag = tag

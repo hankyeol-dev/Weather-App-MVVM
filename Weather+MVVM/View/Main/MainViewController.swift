@@ -78,10 +78,9 @@ extension MainViewController {
         goSomeVC(vc: LocationWeatherViewController(
             vm: LocationWeatherViewModel(repository: SearchRepository(), apiManager: APIService.manager),
             mv: LocationWeatherView() )
-        ) { vc in
-            
-            vc.sender = { location in
-                print(location)
+        ) { target in
+            target.sender = { location in
+                self.vm?.updateCityInput.value = CountryCoord(lat: location.latitude, lon: location.longitude)
             }
         }
     }

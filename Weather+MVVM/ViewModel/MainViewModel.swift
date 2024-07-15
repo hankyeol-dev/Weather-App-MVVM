@@ -13,15 +13,28 @@ final class MainViewModel {
     
     private var currentCity: Country = Country(id: SEOUL_CITY_ID, name: "Seoul", coord: CountryCoord(lat: SEOUL_LAT, lon: SEOUL_LON))
     var viewDidInput = ValueObserver<Void?>(nil)
+    var updateCityInput = ValueObserver<CountryCoord?>(nil)
+    
     var currentWeatherOutput = ValueObserver<WeatherOuput?>(nil)
     var forecastDataOutput = ValueObserver<ForecastOutput?>(nil)
     
     init(repository: SearchRepository) {
         self.repository = repository
+        
         self.viewDidInput.bind(nil) { value in
             guard value != nil else { return }
-            self.fetchCurrentWeather()
-            self.fetchForecast()
+            
+            Task {
+                await self.fetchCurrentWeather()
+                await self.fetchForecast()
+            }
+        }
+        
+        self.updateCityInput.bind(nil) { value in
+            guard let value else { return }
+            Task {
+                await self.addCity(for: value)
+            }
         }
     }
     
@@ -44,74 +57,81 @@ final class MainViewModel {
         }
     }
     
-    private func fetchCurrentWeather() {
+    private func fetchCurrentWeather() async {
         // 1. 도시 정보를 먼저 DB에서 조회해서 가져오고
-        fetchCityInfo()
+        await fetchCityInfo()
+
         
         // 2. fetch
-        DispatchQueue.global().async {
-            var returns = WeatherDataReturnType(city: "", currentTemps: [], description: "", icon: "", additional: [:])
-            self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCity.id))) { (data: WeatherResult?, error: APIService.APIErrors?) in
-                guard error == nil else {
-                    self.currentWeatherOutput.value = WeatherOuput(ok: false)
-                    return
-                }
-                
-                if let data, let getWeather = data.getWeather {
-                    self.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e: APIService.APIErrors?) in
-                        if e != nil {
-                            returns.city = ""
-                        }
-                        
-                        if let city, let ko = city.first?.local_names.ko {
-                            returns.city = ko
-                        } else {
-                            returns.city = data.name
-                        }
-                        returns.currentTemps = data.main.calcTemps
-                        returns.description = self.mapDescription(for: getWeather.id)
-                        returns.icon = getWeather.icon
-                        returns.additional = data.getAdditionalWeather
-                        returns.additional["lat"] = self.currentCity.coord.lat
-                        returns.additional["lon"] = self.currentCity.coord.lon
-                        self.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
+        var returns = WeatherDataReturnType(city: "", currentTemps: [], description: "", icon: "", additional: [:])
+        self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCity.id))) { (data: WeatherResult?, error) in
+            guard error == nil else {
+                self.currentWeatherOutput.value = WeatherOuput(ok: false)
+                return
+            }
+            
+            if let data, let getWeather = data.getWeather {
+                self.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e) in
+                    if e != nil {
+                        returns.city = ""
                     }
                     
+                    if let city, let ko = city.first?.local_names.ko {
+                        returns.city = ko
+                    } else {
+                        returns.city = data.name
+                    }
+                    returns.currentTemps = data.main.calcTemps
+                    returns.description = self.mapDescription(for: getWeather.id)
+                    returns.icon = getWeather.icon
+                    returns.additional = data.getAdditionalWeather
+                    returns.additional["lat"] = self.currentCity.coord.lat
+                    returns.additional["lon"] = self.currentCity.coord.lon
+                    self.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
                 }
             }
         }
     }
     
-    private func fetchForecast() {
-        self.fetchCityInfo()
+    private func fetchForecast() async {
+        await self.fetchCityInfo()
         
         var returns = ForecastDataReturnType(forcasts: [], tempAvgs: [], tempDays: [], tempIcons: [])
-        DispatchQueue.global().async {
-            self.manager.fetch(
-                to: FetchWeatherDTO(type: .forecast(lat: self.currentCity.coord.lat, lon: self.currentCity.coord.lon))
-            ) { (data: ForecastResult?, error: APIService.APIErrors?) in
-                guard error == nil else {
-                    self.forecastDataOutput.value = ForecastOutput(ok: false)
-                    return
-                }
-                
-                if let data {
-                    returns.forcasts = data.tempForcasts
-                    returns.tempAvgs = data.tempAvgs
-                    returns.tempDays = data.tempDays
-                    returns.tempIcons = data.tempIcons
-                    self.forecastDataOutput.value = ForecastOutput(ok: true, data: returns)
-                }
+        self.manager.fetch(
+            to: FetchWeatherDTO(type: .forecast(lat: self.currentCity.coord.lat, lon: self.currentCity.coord.lon))
+        ) { (data: ForecastResult?, error: APIService.APIErrors?) in
+            guard error == nil else {
+                self.forecastDataOutput.value = ForecastOutput(ok: false)
+                return
+            }
+            
+            if let data {
+                returns.forcasts = data.tempForcasts
+                returns.tempAvgs = data.tempAvgs
+                returns.tempDays = data.tempDays
+                returns.tempIcons = data.tempIcons
+                self.forecastDataOutput.value = ForecastOutput(ok: true, data: returns)
             }
         }
+        
     }
     
-    private func fetchCityInfo() {
+    private func fetchCityInfo() async {
         repository?.readSearch { search, error in
             if let error { print(error) }
             if let search, search.count != 0, let city = search.first {
                 self.currentCity = Country(id: city.id, name: city.name, coord: CountryCoord(lat: city.lat, lon: city.lon))
             }
         }
+    }
+    
+    private func addCity(for input: CountryCoord) async {
+        manager.fetch(to: FetchWeatherDTO(type: .forecast(lat: input.lat, lon: input.lon)), handler: { (data: ForecastCityResult?, error) in
+            if let error { print(error) }
+            if let city = data?.city {
+                self.repository?.addSearch(SearchModel(id: city.id, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
+            }
+        })
+        await self.fetchCityInfo()
     }
 }

@@ -8,10 +8,10 @@
 import UIKit
 import MapKit
 
-final class LocationWeatherViewController: BaseViewController {
-    var sender: ((CLLocationCoordinate2D) -> ())?
+final class LocationWeatherViewController: BaseViewController {    
     private var vm: LocationWeatherViewModel?
     var mv: LocationWeatherView?
+    var sender: ((CLLocationCoordinate2D) -> ())?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -51,7 +51,6 @@ final class LocationWeatherViewController: BaseViewController {
             
             if sender.state == .ended {
                 mv.searchLocation(point: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude))
-                print(mv.city)
                 self.showAlert(location: point)
             }
         }
@@ -63,6 +62,7 @@ final class LocationWeatherViewController: BaseViewController {
         alert.title = "이 위치의 날씨를 조회할까요?"
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+//            self.vm?.selectedCityInput.value = CountryCoord(lat: location.latitude, lon: location.longitude)
             self.sender?(location)
             self.navigationController?.popViewController(animated: true)
         }))

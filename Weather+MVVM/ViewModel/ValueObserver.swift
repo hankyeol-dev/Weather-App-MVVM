@@ -20,7 +20,7 @@ final class ValueObserver<T> {
         self.value = value
     }
     
-    func bind(_ value: T, handler: @escaping (T) -> ()) {
+    func bind(_ value: T, handler: @escaping (T) ->  ()) {
         handler(value)
         self.handler = handler
     }

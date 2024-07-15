@@ -12,10 +12,19 @@ final class LocationWeatherViewModel {
     private var apiManager: APIService?
     
     private var currentCity: Country = Country(id: SEOUL_CITY_ID, name: "Seoul", coord: CountryCoord(lat: SEOUL_LAT, lon: SEOUL_LON))
+    var selectedCityInput = ValueObserver<CountryCoord?>(nil)
     
     init(repository: SearchRepository, apiManager: APIService) {
         self.repository = repository
         self.apiManager = apiManager
+        
+        self.selectedCityInput.bind(nil) { coord in
+            if let coord {
+                Task {
+                    await self.findCityAndAdd(for: coord)
+                }
+            }
+        }
     }
     
     private func fetchCityInfo() {
@@ -27,8 +36,17 @@ final class LocationWeatherViewModel {
         }
     }
     
+    private func findCityAndAdd(for input: CountryCoord) async {
+        apiManager?.fetch(to: FetchWeatherDTO(type: .forecast(lat: input.lat, lon: input.lon)), handler: { (data: ForecastCityResult?, error) in
+            if let error { print(error) }
+            if let city = data?.city {
+                self.repository?.addSearch(SearchModel(id: city.id, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
+            }
+        })
+    }
     
     func getCurrentCityInfo() -> Country {
+        self.fetchCityInfo() 
         return self.currentCity
     }
 }

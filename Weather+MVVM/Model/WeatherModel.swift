@@ -78,7 +78,7 @@ struct ForecastResult: Decodable {
             let convert = d.date(from: $0.dt_txt)
             
             if let convert {
-                return Calendar.current.compare(convert, to: Date(), toGranularity: .hour) == .orderedDescending
+                return Calendar.current.compare(convert, to: Date(), toGranularity: .day) == .orderedDescending || Calendar.current.compare(convert, to: Date(), toGranularity: .day) == .orderedSame
             }
             return false
         }.map { Forecast(main: $0.main, weather: $0.weather, dt_txt: $0.dt_txt) }
@@ -119,4 +119,14 @@ struct ForecastResult: Decodable {
             return icon
         }
     }
+}
+
+struct ForecastCity: Decodable {
+    let id: Int
+    let name: String
+    let coord: CountryCoord
+}
+
+struct ForecastCityResult: Decodable {
+    let city: ForecastCity
 }

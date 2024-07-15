@@ -17,6 +17,7 @@ final class MainViewModel {
     
     var currentWeatherOutput = ValueObserver<WeatherOuput?>(nil)
     var forecastDataOutput = ValueObserver<ForecastOutput?>(nil)
+    var updateCityOutput = ValueObserver<Any?>(nil)
     
     init(repository: SearchRepository) {
         self.repository = repository
@@ -32,9 +33,7 @@ final class MainViewModel {
         
         self.updateCityInput.bind(nil) { value in
             guard let value else { return }
-            Task {
-                await self.addCity(for: value)
-            }
+            self.addCity(for: value)
         }
     }
     
@@ -125,13 +124,13 @@ final class MainViewModel {
         }
     }
     
-    private func addCity(for input: CountryCoord) async {
+    func addCity(for input: CountryCoord)  {
         manager.fetch(to: FetchWeatherDTO(type: .forecast(lat: input.lat, lon: input.lon)), handler: { (data: ForecastCityResult?, error) in
             if let error { print(error) }
             if let city = data?.city {
                 self.repository?.addSearch(SearchModel(id: city.id, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
+                self.updateCityOutput.value = "updated!"
             }
         })
-        await self.fetchCityInfo()
     }
 }

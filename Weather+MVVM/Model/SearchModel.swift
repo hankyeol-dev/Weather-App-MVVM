@@ -90,4 +90,14 @@ final class SearchRepository {
             context.delete(search)
         }
     }
+    
+    func deleteAll() {
+        if let context {
+            do {
+                try context.delete(model: SearchModel.self)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }

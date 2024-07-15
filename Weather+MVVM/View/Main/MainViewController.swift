@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 final class MainViewController: BaseViewController {
     private var vm: MainViewModel?
@@ -55,6 +56,14 @@ final class MainViewController: BaseViewController {
                 }
             }
         })
+        vm?.updateCityOutput.bind("", handler: { output in
+            DispatchQueue.main.async {
+                if output != nil {
+                    self.mainView?.collection.reloadData()
+                    self.mainView?.table.reloadSections(IndexSet(integer: 0), with: .none)
+                }
+            }
+        })
     }
 }
 
@@ -78,8 +87,8 @@ extension MainViewController {
         goSomeVC(vc: LocationWeatherViewController(
             vm: LocationWeatherViewModel(repository: SearchRepository(), apiManager: APIService.manager),
             mv: LocationWeatherView() )
-        ) { target in
-            target.sender = { location in
+        ) { vc in
+            vc.sender = { location in
                 self.vm?.updateCityInput.value = CountryCoord(lat: location.latitude, lon: location.longitude)
             }
         }

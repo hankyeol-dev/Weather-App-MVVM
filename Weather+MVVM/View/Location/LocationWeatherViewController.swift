@@ -43,6 +43,10 @@ final class LocationWeatherViewController: BaseViewController {
         configureNav(title: "", leftBarItem: genLeftWithGoBack(.systemGray), rightBarItem: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
     @objc
     private func touchMap(_ sender: UITapGestureRecognizer) {
         if let mv {
@@ -61,10 +65,9 @@ final class LocationWeatherViewController: BaseViewController {
         let alert = UIAlertController()
         alert.title = "이 위치의 날씨를 조회할까요?"
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
-//            self.vm?.selectedCityInput.value = CountryCoord(lat: location.latitude, lon: location.longitude)
-            self.sender?(location)
-            self.navigationController?.popViewController(animated: true)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            self?.sender?(location)
+            self?.navigationController?.popViewController(animated: true)
         }))
         present(alert, animated: true)
     }

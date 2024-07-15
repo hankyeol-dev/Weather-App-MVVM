@@ -56,14 +56,6 @@ final class MainViewController: BaseViewController {
                 }
             }
         })
-        vm?.updateCityOutput.bind("", handler: { output in
-            DispatchQueue.main.async {
-                if output != nil {
-                    self.mainView?.collection.reloadData()
-                    self.mainView?.table.reloadSections(IndexSet(integer: 0), with: .none)
-                }
-            }
-        })
     }
 }
 

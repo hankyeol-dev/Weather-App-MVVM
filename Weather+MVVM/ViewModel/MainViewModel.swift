@@ -17,7 +17,6 @@ final class MainViewModel {
     
     var currentWeatherOutput = ValueObserver<WeatherOuput?>(nil)
     var forecastDataOutput = ValueObserver<ForecastOutput?>(nil)
-    var updateCityOutput = ValueObserver<Any?>(nil)
     
     init(repository: SearchRepository) {
         self.repository = repository
@@ -25,10 +24,8 @@ final class MainViewModel {
         self.viewDidInput.bind(nil) { value in
             guard value != nil else { return }
             
-            Task {
-                await self.fetchCurrentWeather()
-                await self.fetchForecast()
-            }
+            self.fetchCurrentWeather()
+            self.fetchForecast()
         }
         
         self.updateCityInput.bind(nil) { value in
@@ -56,9 +53,9 @@ final class MainViewModel {
         }
     }
     
-    private func fetchCurrentWeather() async {
+    private func fetchCurrentWeather() {
         // 1. 도시 정보를 먼저 DB에서 조회해서 가져오고
-        await fetchCityInfo()
+        fetchCityInfo()
 
         
         // 2. fetch
@@ -92,8 +89,8 @@ final class MainViewModel {
         }
     }
     
-    private func fetchForecast() async {
-        await self.fetchCityInfo()
+    private func fetchForecast() {
+         self.fetchCityInfo()
         
         var returns = ForecastDataReturnType(forcasts: [], tempAvgs: [], tempDays: [], tempIcons: [])
         self.manager.fetch(
@@ -115,7 +112,7 @@ final class MainViewModel {
         
     }
     
-    private func fetchCityInfo() async {
+    private func fetchCityInfo()  {
         repository?.readSearch { search, error in
             if let error { print(error) }
             if let search, search.count != 0, let city = search.first {
@@ -124,12 +121,13 @@ final class MainViewModel {
         }
     }
     
-    func addCity(for input: CountryCoord)  {
+    private func addCity(for input: CountryCoord)  {
         manager.fetch(to: FetchWeatherDTO(type: .forecast(lat: input.lat, lon: input.lon)), handler: { (data: ForecastCityResult?, error) in
             if let error { print(error) }
             if let city = data?.city {
                 self.repository?.addSearch(SearchModel(id: city.id, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
-                self.updateCityOutput.value = "updated!"
+                self.fetchCurrentWeather()
+                self.fetchForecast()
             }
         })
     }

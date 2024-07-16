@@ -27,24 +27,24 @@ final class SearchViewModel {
     }
     
     private func triggerInput() {
-        loadInput.bind(nil) { input in
+        loadInput.bind(nil) { [weak self] input in
             guard input != nil else { return }
-            self.fetchCity()
+            self?.fetchCity()
         }
         
-        searchInput.bind("") { keyword in
-            self.searchCity(keyword)
+        searchInput.bind("") { [weak self] keyword in
+            self?.searchCity(by: keyword)
         }
         
-        addButtonInput.bind(0) { input in
+        addButtonInput.bind(0) { [weak self] input in
             if input != 0 {
-                self.addCity(input)
+                self?.addCity(input)
             }
         }
         
-        deleteButtonInput.bind(0) { input in
+        deleteButtonInput.bind(0) { [weak self] input in
             if input != 0 {
-                self.deleteCity(input)
+                self?.deleteCity(input)
             }
         }
     }
@@ -58,7 +58,7 @@ final class SearchViewModel {
         }
     }
     
-    private func searchCity(_ keyword: String?) {
+    private func searchCity(by keyword: String?) {
         guard let keyword else { return }
         
         if keyword.isEmpty {
@@ -106,21 +106,21 @@ final class SearchViewModel {
     private func addCity(_ cityId: Int) {
         let city = searchList.filter({ $0.id == cityId }).first
         if let city {
-            repository?.addSearch(SearchModel(id: cityId, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
+            repository?.addSearch(by: SearchModel(id: cityId, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
             let newList = mappingToSearchOutput(by: cityId)
             searchOutput.value = newList
         }
     }
     
     private func deleteCity(_ cityId: Int) {
-        repository?.readSearchById(cityId) { data, error in
+        repository?.readSearchById(by: cityId) { [weak self] data, error in
             if let error {
                 print(error.rawValue)
             }
             
             if let data {
-                self.repository?.deleteSearch(for: data)
-                self.searchOutput.value = self.mappingToSearchOutput(by: cityId)
+                self?.repository?.deleteSearch(for: data)
+                self?.searchOutput.value = self!.mappingToSearchOutput(by: cityId)
             }
         }
     }

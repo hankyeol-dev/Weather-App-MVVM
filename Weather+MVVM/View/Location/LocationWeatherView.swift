@@ -36,12 +36,12 @@ final class LocationWeatherView: BaseView {
         
         map.removeAnnotations(map.annotations)
         
-        geocoder.reverseGeocodeLocation(location) { mark, error in
+        geocoder.reverseGeocodeLocation(location) { [weak self] mark, error in
             if error == nil, let mark, let place = mark.first {
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude)
                 annotation.title = "\(place.thoroughfare ?? "")"
-                self.map.addAnnotation(annotation)
+                self?.map.addAnnotation(annotation)
             }
         }
     }

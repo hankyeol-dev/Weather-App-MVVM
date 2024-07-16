@@ -114,13 +114,13 @@ extension MainView {
         data.additional.enumerated().forEach { (idx, value) in
             switch value.key {
             case "기압":
-                self.genStackItem(for: self.stackOne, as: value.key, text: "\(value.value) hpa")
+                genStackItem(for: self.stackOne, as: value.key, text: "\(value.value) hpa")
             case "습도":
-                self.genStackItem(for: self.stackOne, as: value.key, text: "\(value.value)%")
+                genStackItem(for: stackOne, as: value.key, text: "\(value.value)%")
             case "구름":
-                self.genStackItem(for: self.stackTwo, as: value.key, text: "\(value.value)%")
+                genStackItem(for: stackTwo, as: value.key, text: "\(value.value)%")
             case "바람":
-                self.genStackItem(for: self.stackTwo, as: value.key, text: "\(value.value) m/s")
+                genStackItem(for: stackTwo, as: value.key, text: "\(value.value) m/s")
             default:
                 break;
             }

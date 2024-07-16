@@ -18,7 +18,7 @@ final class APIService {
         case cityname(name: String)
     }
     
-    enum APIErrors: String {
+    enum APIErrors: String, Error {
         case badRequest = "잘못된 요청입니다."
         case notFound = "요청 결과를 찾을 수 없습니다."
         case badResponse = "무언가 잘못되었어요 ㅠㅠ"
@@ -61,15 +61,34 @@ final class APIService {
         }
     }
     
-    typealias handler<T> = (T?, APIErrors?) -> ()
+    typealias handler<T> = (Result<T, any Error>) -> ()
     
-    func fetch<T: Decodable>(to dto: FetchWeatherDTO, handler: @escaping handler<T>) {
+    func fetch<T: Decodable>(to dto: FetchWeatherDTO, of decodable: T.Type, handler: @escaping handler<T>) {
         let request = genRequest(genEndPoint(to: dto))
-        self.fetchTask(for: request, handler: handler)
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            guard error == nil else {
+                handler(.failure(APIService.APIErrors.badRequest))
+                return
+            }
+            
+            guard let data else {
+                handler(.failure(APIService.APIErrors.notFound))
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode(T.self, from: data)
+                handler(.success(result))
+            } catch {
+                handler(.failure(APIService.APIErrors.badResponse))
+            }
+        }
+        
+        task.resume()
     }
     
-    
-    private func fetchTask<T: Decodable>(for request: URLRequest, handler: @escaping handler<T>) {
+    func fetch<T: Decodable>(to dto: FetchWeatherDTO, handler: @escaping (T?, APIErrors?) -> ()) {
+        let request = genRequest(genEndPoint(to: dto))
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard error == nil else {
                 handler(nil, .badRequest)
@@ -85,7 +104,6 @@ final class APIService {
                 let result = try JSONDecoder().decode(T.self, from: data)
                 handler(result, nil)
             } catch {
-                print(error)
                 handler(nil, .badResponse)
             }
         }

@@ -21,16 +21,16 @@ final class MainViewModel {
     init(repository: SearchRepository) {
         self.repository = repository
         
-        self.viewDidInput.bind(nil) { value in
+        self.viewDidInput.bind(nil) { [weak self] value in
             guard value != nil else { return }
             
-            self.fetchCurrentWeather()
-            self.fetchForecast()
+            self?.fetchCurrentWeather()
+            self?.fetchForecast()
         }
         
-        self.updateCityInput.bind(nil) { value in
+        self.updateCityInput.bind(nil) { [weak self] value in
             guard let value else { return }
-            self.addCity(for: value)
+            self?.addCity(for: value)
         }
     }
     
@@ -60,14 +60,14 @@ final class MainViewModel {
         
         // 2. fetch
         var returns = WeatherDataReturnType(city: "", currentTemps: [], description: "", icon: "", additional: [:])
-        self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCity.id))) { (data: WeatherResult?, error) in
+        self.manager.fetch(to: FetchWeatherDTO(type: .current(id: self.currentCity.id))) { [weak self] (data: WeatherResult?, error) in
             guard error == nil else {
-                self.currentWeatherOutput.value = WeatherOuput(ok: false)
+                self?.currentWeatherOutput.value = WeatherOuput(ok: false)
                 return
             }
             
             if let data, let getWeather = data.getWeather {
-                self.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e) in
+                self?.manager.fetch(to: FetchWeatherDTO(type: .cityname(name: data.name))) { (city: [CityNameResult]?, e) in
                     if e != nil {
                         returns.city = ""
                     }
@@ -78,12 +78,12 @@ final class MainViewModel {
                         returns.city = data.name
                     }
                     returns.currentTemps = data.main.calcTemps
-                    returns.description = self.mapDescription(for: getWeather.id)
+                    returns.description = self?.mapDescription(for: getWeather.id) ?? "날씨가 참 좋아요"
                     returns.icon = getWeather.icon
                     returns.additional = data.getAdditionalWeather
-                    returns.additional["lat"] = self.currentCity.coord.lat
-                    returns.additional["lon"] = self.currentCity.coord.lon
-                    self.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
+                    returns.additional["lat"] = self?.currentCity.coord.lat
+                    returns.additional["lon"] = self?.currentCity.coord.lon
+                    self?.currentWeatherOutput.value = WeatherOuput(ok: true, error: nil, data: returns)
                 }
             }
         }
@@ -95,9 +95,9 @@ final class MainViewModel {
         var returns = ForecastDataReturnType(forcasts: [], tempAvgs: [], tempDays: [], tempIcons: [])
         self.manager.fetch(
             to: FetchWeatherDTO(type: .forecast(lat: self.currentCity.coord.lat, lon: self.currentCity.coord.lon))
-        ) { (data: ForecastResult?, error: APIService.APIErrors?) in
+        ) { [weak self] (data: ForecastResult?, error: APIService.APIErrors?) in
             guard error == nil else {
-                self.forecastDataOutput.value = ForecastOutput(ok: false)
+                self?.forecastDataOutput.value = ForecastOutput(ok: false)
                 return
             }
             
@@ -106,29 +106,32 @@ final class MainViewModel {
                 returns.tempAvgs = data.tempAvgs
                 returns.tempDays = data.tempDays
                 returns.tempIcons = data.tempIcons
-                self.forecastDataOutput.value = ForecastOutput(ok: true, data: returns)
+                self?.forecastDataOutput.value = ForecastOutput(ok: true, data: returns)
             }
         }
         
     }
     
     private func fetchCityInfo()  {
-        repository?.readSearch { search, error in
+        repository?.readSearch { [weak self] search, error in
             if let error { print(error) }
             if let search, search.count != 0, let city = search.first {
-                self.currentCity = Country(id: city.id, name: city.name, coord: CountryCoord(lat: city.lat, lon: city.lon))
+                self?.currentCity = Country(id: city.id, name: city.name, coord: CountryCoord(lat: city.lat, lon: city.lon))
             }
         }
     }
     
     private func addCity(for input: CountryCoord)  {
-        manager.fetch(to: FetchWeatherDTO(type: .forecast(lat: input.lat, lon: input.lon)), handler: { (data: ForecastCityResult?, error) in
-            if let error { print(error) }
-            if let city = data?.city {
-                self.repository?.addSearch(SearchModel(id: city.id, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
-                self.fetchCurrentWeather()
-                self.fetchForecast()
+        manager.fetch(to: FetchWeatherDTO(type: .forecast(lat: input.lat, lon: input.lon)), of: ForecastCityResult.self) { [weak self] res in
+            switch res {
+            case .success(let result):
+                let city = result.city
+                self?.repository?.addSearch(by: SearchModel(id: city.id, name: city.name, lat: city.coord.lat, lon: city.coord.lon))
+                self?.fetchCurrentWeather()
+                self?.fetchForecast()
+            case .failure(let error):
+                print(error)
             }
-        })
+        }
     }
 }

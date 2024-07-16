@@ -64,7 +64,7 @@ final class MainForecastCell: BaseTableCell {
         DispatchQueue.main.async {
             self.day.text = tempDays
             self.icon.kf.setImage(with: URL(string: ICON_URL + tempIcons + "@2x.png"))
-            self.temp.text = "\(tempAvgs[1]) / \(tempAvgs[2])"
+            self.temp.text = "\(tempAvgs[0]) / \(tempAvgs[1])"
             
             let minText = self.temp.text?.components(separatedBy: " / ").first ?? ""
             let maxText = self.temp.text?.components(separatedBy: " / ").last ?? ""

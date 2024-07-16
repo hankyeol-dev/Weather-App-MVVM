@@ -45,9 +45,9 @@ final class SearchCityViewController: BaseViewController {
     
     private func configureData() {
         vm?.loadInput.value = ()
-        vm?.searchOutput.bind([], handler: { output in
+        vm?.searchOutput.bind([], handler: { [weak self] output in
             if output.count != 0 {
-                self.mv?.searchTable.reloadData()
+                self?.mv?.searchTable.reloadData()
             }
         })
     }

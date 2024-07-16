@@ -33,8 +33,7 @@ final class LocationWeatherViewController: BaseViewController {
         if let vm {
             mv?.configureViewWithData(lat: vm.getCurrentCityInfo().coord.lat, lon: vm.getCurrentCityInfo().coord.lon)
         }
-        
-        
+    
         mv?.map.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(touchMap)))
     }
     

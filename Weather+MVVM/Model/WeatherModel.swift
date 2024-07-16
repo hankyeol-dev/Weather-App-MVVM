@@ -85,11 +85,20 @@ struct ForecastResult: Decodable {
     }
     
     var tempAvgs: [[Double]] {
-        let array = self.list.split { cast in
+        let max = self.list.split { cast in
             cast.dt_txt.contains("00:00:00")
-        }.map { $0.last }
+        }.map { (($0.map { $0.main.temp_max }).reduce(0) { partialResult, next in
+            partialResult + next
+        }) / Double($0.count) }
         
-        return array.map { $0!.main.calcTemps }
+        let min = self.list.split { cast in
+            cast.dt_txt.contains("00:00:00")
+        }.map { (($0.map { $0.main.temp_min }).reduce(0) { partialResult, next in
+            partialResult + next
+        }) / Double($0.count) }
+        
+        
+        return [max, min].map { $0.map { (($0 - 273.15) * 10).rounded() / 10 } }
     }
     
     var tempDays: [String] {

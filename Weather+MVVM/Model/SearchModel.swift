@@ -49,7 +49,7 @@ final class SearchRepository {
         }
     }
     
-    func addSearch(_ search: SearchModel) {
+    func addSearch(by search: SearchModel) {
         if let context {
             context.insert(search)
         }
@@ -68,7 +68,7 @@ final class SearchRepository {
         }
     }
     
-    func readSearchById(_ cityId: Int, dataHandler: @escaping (SearchModel?, RepositoryErrors?) -> ()) {
+    func readSearchById(by cityId: Int, dataHandler: @escaping (SearchModel?, RepositoryErrors?) -> ()) {
         let descriptor = FetchDescriptor<SearchModel>(predicate: #Predicate { $0.id == cityId })
         
         if let context {

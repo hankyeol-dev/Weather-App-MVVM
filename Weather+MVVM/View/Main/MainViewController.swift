@@ -41,18 +41,18 @@ final class MainViewController: BaseViewController {
 
     func configureData() {
         vm?.viewDidInput.value = ()
-        vm?.currentWeatherOutput.bind(nil, handler: { output in
+        vm?.currentWeatherOutput.bind(nil, handler: { [weak self] output in
             DispatchQueue.main.async {
                 if let data = output?.data {
-                    self.mainView?.configureViewWithData(data)
+                    self?.mainView?.configureViewWithData(data)
                 }
             }
         })
-        vm?.forecastDataOutput.bind(nil, handler: { output in
+        vm?.forecastDataOutput.bind(nil, handler: { [weak self] output in
             DispatchQueue.main.async {
                 if output?.ok != nil {
-                    self.mainView?.collection.reloadData()
-                    self.mainView?.table.reloadSections(IndexSet(integer: 0), with: .none)
+                    self?.mainView?.collection.reloadData()
+                    self?.mainView?.table.reloadSections(IndexSet(integer: 0), with: .none)
                 }
             }
         })
@@ -80,8 +80,8 @@ extension MainViewController {
             vm: LocationWeatherViewModel(repository: SearchRepository(), apiManager: APIService.manager),
             mv: LocationWeatherView() )
         ) { vc in
-            vc.sender = { location in
-                self.vm?.updateCityInput.value = CountryCoord(lat: location.latitude, lon: location.longitude)
+            vc.sender = { [weak self] location in
+                self?.vm?.updateCityInput.value = CountryCoord(lat: location.latitude, lon: location.longitude)
             }
         }
     }
@@ -134,7 +134,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let vm else { return 0 }
         guard let data = vm.forecastDataOutput.value?.data else { return 0 }
-        return data.tempAvgs.count
+        return data.tempDays.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -143,7 +143,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         guard let data = vm.forecastDataOutput.value?.data else { return UITableViewCell() }
         
         let cell = MainForecastCell.dequeueReusableCell(tableView: table)
-        cell.configureViewWithData(tempAvgs: data.tempAvgs[indexPath.row], tempDays: data.tempDays[indexPath.row], tempIcons: data.tempIcons[indexPath.row])
+        cell.configureViewWithData(tempAvgs: [data.tempAvgs[0][indexPath.row], data.tempAvgs[1][indexPath.row]], tempDays: data.tempDays[indexPath.row], tempIcons: data.tempIcons[indexPath.row])
         return cell
     }
 }

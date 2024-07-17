@@ -8,8 +8,8 @@
 import UIKit
 
 final class SearchCityViewController: BaseViewController {
-    private var vm: SearchViewModel?
-    private var mv: SearchCityView?
+    private weak var vm: SearchViewModel?
+    private weak var mv: SearchCityView?
     
     init(vm: SearchViewModel, mv: SearchCityView) {
         super.init(nibName: nil, bundle: nil)

@@ -9,8 +9,8 @@ import UIKit
 import MapKit
 
 final class MainViewController: BaseViewController {
-    private var vm: MainViewModel?
-    private var mainView: MainView?
+    private weak var vm: MainViewModel?
+    private weak var mainView: MainView?
     
     init(vm: MainViewModel, mv: MainView) {
         self.vm = vm

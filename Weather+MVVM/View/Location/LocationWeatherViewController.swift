@@ -9,8 +9,8 @@ import UIKit
 import MapKit
 
 final class LocationWeatherViewController: BaseViewController {    
-    private var vm: LocationWeatherViewModel?
-    var mv: LocationWeatherView?
+    private weak var vm: LocationWeatherViewModel?
+    weak var mv: LocationWeatherView?
     var sender: ((CLLocationCoordinate2D) -> ())?
     
     required init?(coder: NSCoder) {
